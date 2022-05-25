@@ -9,7 +9,32 @@
 // Дана последовательность из N чисел. Посчитать количество простых чисел.
 
 #include <iostream>
+#include <chrono>
 #define N_Max 1000
+
+class Timer
+{
+private:
+	using clock_t = std::chrono::high_resolution_clock;
+	using second_t = std::chrono::duration<double, std::ratio<1> >;
+
+	std::chrono::time_point<clock_t> m_beg;
+
+public:
+	Timer() : m_beg(clock_t::now())
+	{
+	}
+
+	void reset()
+	{
+		m_beg = clock_t::now();
+	}
+
+	double elapsed() const
+	{
+		return std::chrono::duration_cast<second_t>(clock_t::now() - m_beg).count();
+	}
+};
 
 int NumberOfPrimes(int arr[N_Max], int n) {
 	int counter = 0;
@@ -35,7 +60,9 @@ int main()
 	int mas[N_Max];
 	for (int i = 0; i < N_Max; i++)
 		mas[i] = rand();
+	Timer t;
 	std::cout << NumberOfPrimes(mas, N_Max) << std::endl;
+	std::cout << "Time elapsed: " << t.elapsed() << std::endl;
 }
 
 // Cложность алгоритма:
